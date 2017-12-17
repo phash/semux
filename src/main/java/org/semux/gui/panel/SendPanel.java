@@ -341,7 +341,7 @@ public class SendPanel extends JPanel {
                 long value = getAmountText();
                 long fee = getFeeText();
                 String memo = getDataText();
-                byte[] to = Hex.decode(getToText());
+                byte[] to = Hex.decode0x(getToText());
 
                 if (validation(acc, fee, value, memo, to)) {
                     int ret = JOptionPane.showConfirmDialog(SendPanel.this,
