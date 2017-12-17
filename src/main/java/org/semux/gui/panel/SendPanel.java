@@ -47,7 +47,9 @@ public class SendPanel extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private JFrame frame;
+
     private transient SendPanelActionListener actionListener = new SendPanelActionListener();
+
     private transient WalletModel model;
 
     private transient Kernel kernel;
@@ -341,9 +343,11 @@ public class SendPanel extends JPanel {
                 long value = getAmountText();
                 long fee = getFeeText();
                 String memo = getDataText();
+
                 byte[] to = Hex.decode0x(getToText());
 
                 if (validation(acc, fee, value, memo, to)) {
+
                     int ret = JOptionPane.showConfirmDialog(SendPanel.this,
                             GUIMessages.get("TransferInfo", SwingUtil.formatValue(value), Hex.encode(to)),
                             GUIMessages.get("ConfirmTransfer"), JOptionPane.YES_NO_OPTION);
@@ -352,6 +356,7 @@ public class SendPanel extends JPanel {
                     }
 
                     PendingManager pendingMgr = kernel.getPendingManager();
+
                     TransactionType type = TransactionType.TRANSFER;
                     byte[] from = acc.getKey().toAddress();
                     long nonce = pendingMgr.getNonce(from);
@@ -392,6 +397,5 @@ public class SendPanel extends JPanel {
                 return true;
             }
         }
-
     }
 }

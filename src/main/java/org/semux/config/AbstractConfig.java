@@ -39,7 +39,8 @@ public abstract class AbstractConfig implements Config {
     protected byte networkId;
     protected short networkVersion;
 
-    protected int maxBlockSize = 5000;
+
+    protected int maxBlockSize = 2 * 1024 * 1024;
     protected int maxTransferDataSize = 128;
     protected long minTransactionFee = 50L * Unit.MILLI_SEM;
     protected long minDelegateFee = 1000L * Unit.SEM;
