@@ -355,7 +355,7 @@ public class SendPanel extends JPanel {
                 } else if (!Validations.validateAddressLength(to)) {
                     JOptionPane.showMessageDialog(SendPanel.this, GUIMessages.get("InvalidReceivingAddress"));
                 } else if (!Validations.validateDataLength(memo, config)) {
-                    JOptionPane.showMessageDialog(SendPanel.this, GUIMessages.get("InvalidData", 128));
+                    JOptionPane.showMessageDialog(SendPanel.this, GUIMessages.get("InvalidData", config.maxTransferDataSize()));
                 } else {
                     int ret = JOptionPane.showConfirmDialog(SendPanel.this,
                             GUIMessages.get("TransferInfo", SwingUtil.formatValue(value), Hex.encode(to)),
