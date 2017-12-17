@@ -343,20 +343,7 @@ public class SendPanel extends JPanel {
                 String memo = getDataText();
                 byte[] to = Hex.decode(getToText());
 
-                if (acc == null) {
-                    JOptionPane.showMessageDialog(SendPanel.this, GUIMessages.get("SelectAccount"));
-                } else if (!Validations.validatePositiveAmountToSend(value)) {
-                    JOptionPane.showMessageDialog(SendPanel.this, GUIMessages.get("EnterValidValue"));
-                } else if (!Validations.validateFeeHighEnough(fee, config)) {
-                    JOptionPane.showMessageDialog(SendPanel.this, GUIMessages.get("TransactionFeeTooLow"));
-                } else if (!Validations.validateSufficientBalanceAvailable(acc, value, fee)) {
-                    JOptionPane.showMessageDialog(SendPanel.this,
-                            GUIMessages.get("InsufficientFunds", SwingUtil.formatValue(value + fee)));
-                } else if (!Validations.validateAddressLength(to)) {
-                    JOptionPane.showMessageDialog(SendPanel.this, GUIMessages.get("InvalidReceivingAddress"));
-                } else if (!Validations.validateDataLength(memo, config)) {
-                    JOptionPane.showMessageDialog(SendPanel.this, GUIMessages.get("InvalidData", config.maxTransferDataSize()));
-                } else {
+                if (validation(acc, fee, value, memo, to)) {
                     int ret = JOptionPane.showConfirmDialog(SendPanel.this,
                             GUIMessages.get("TransferInfo", SwingUtil.formatValue(value), Hex.encode(to)),
                             GUIMessages.get("ConfirmTransfer"), JOptionPane.YES_NO_OPTION);
@@ -365,7 +352,6 @@ public class SendPanel extends JPanel {
                     }
 
                     PendingManager pendingMgr = kernel.getPendingManager();
-
                     TransactionType type = TransactionType.TRANSFER;
                     byte[] from = acc.getKey().toAddress();
                     long nonce = pendingMgr.getNonce(from);
@@ -378,6 +364,32 @@ public class SendPanel extends JPanel {
                 }
             } catch (ParseException ex) {
                 JOptionPane.showMessageDialog(SendPanel.this, "Exception: " + ex.getMessage());
+            }
+        }
+
+        private boolean validation(WalletAccount acc, long fee, long value, String memo, byte[] to) {
+            if (acc == null) {
+                JOptionPane.showMessageDialog(SendPanel.this, GUIMessages.get("SelectAccount"));
+                return false;
+            } else if (!Validations.validatePositiveAmountToSend(value)) {
+                JOptionPane.showMessageDialog(SendPanel.this, GUIMessages.get("EnterValidValue"));
+                return false;
+            } else if (!Validations.validateFeeHighEnough(fee, config)) {
+                JOptionPane.showMessageDialog(SendPanel.this, GUIMessages.get("TransactionFeeTooLow"));
+                return false;
+            } else if (!Validations.validateSufficientBalanceAvailable(acc, value, fee)) {
+                JOptionPane.showMessageDialog(SendPanel.this,
+                        GUIMessages.get("InsufficientFunds", SwingUtil.formatValue(value + fee)));
+                return false;
+            } else if (!Validations.validateAddressLength(to)) {
+                JOptionPane.showMessageDialog(SendPanel.this, GUIMessages.get("InvalidReceivingAddress"));
+                return false;
+            } else if (!Validations.validateDataLength(memo, config)) {
+                JOptionPane.showMessageDialog(SendPanel.this,
+                        GUIMessages.get("InvalidData", config.maxTransferDataSize()));
+                return false;
+            } else {
+                return true;
             }
         }
 
