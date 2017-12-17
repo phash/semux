@@ -323,12 +323,16 @@ public class SendPanel extends JPanel {
                 clear();
                 break;
             case SHOW_ADDRESSBOOK:
-                AddressBookDialog dialog = new AddressBookDialog(frame, model);
-                dialog.setVisible(true);
+                showAdressBook();
                 break;
             default:
                 throw new UnreachableException();
             }
+        }
+
+        private void showAdressBook() {
+            AddressBookDialog dialog = new AddressBookDialog(frame, model);
+            dialog.setVisible(true);
         }
 
         private void sendAction() {
