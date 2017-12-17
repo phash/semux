@@ -47,7 +47,7 @@ public class SendPanel extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private JFrame frame;
-    private SendPanelActionListener actionListener = new SendPanelActionListener();
+    private transient SendPanelActionListener actionListener = new SendPanelActionListener();
     private transient WalletModel model;
 
     private transient Kernel kernel;
