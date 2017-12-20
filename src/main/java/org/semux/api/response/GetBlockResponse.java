@@ -67,18 +67,25 @@ public class GetBlockResponse extends ApiHandlerResponse {
         @JsonProperty("transactions")
         public final List<GetTransactionResponse.Result> transactions;
 
-        public Result(@JsonProperty("hash") String hash, @JsonProperty("number") Long number,
-                @JsonProperty("view") Integer view, @JsonProperty("coinbase") String coinbase,
-                @JsonProperty("parentHash") String prevHash, @JsonProperty("timestamp") Long timestamp,
-                @JsonProperty("date") String date, @JsonProperty("transactionsRoot") String transactionsRoot,
-                @JsonProperty("resultsRoot") String resultsRoot, @JsonProperty("stateRoot") String stateRoot,
-                @JsonProperty("data") String data,
-                @JsonProperty("transactions") List<GetTransactionResponse.Result> transactions) {
+        public Result( //
+                @JsonProperty("hash") String hash, //
+                @JsonProperty("number") Long number, //
+                @JsonProperty("view") Integer view, //
+                @JsonProperty("coinbase") String coinbase, //
+                @JsonProperty("parentHash") String parentHash, //
+                @JsonProperty("timestamp") Long timestamp, //
+                @JsonProperty("date") String date, //
+                @JsonProperty("transactionsRoot") String transactionsRoot, //
+                @JsonProperty("resultsRoot") String resultsRoot, //
+                @JsonProperty("stateRoot") String stateRoot, //
+                @JsonProperty("data") String data, //
+                @JsonProperty("transactions") List<GetTransactionResponse.Result> transactions //
+        ) {
             this.hash = hash;
             this.number = number;
             this.view = view;
             this.coinbase = coinbase;
-            this.parentHash = prevHash;
+            this.parentHash = parentHash;
             this.timestamp = timestamp;
             this.date = date;
             this.transactionsRoot = transactionsRoot;
@@ -89,12 +96,18 @@ public class GetBlockResponse extends ApiHandlerResponse {
         }
 
         public Result(Block block) {
-            this(Hex.encode0x(block.getHash()), block.getNumber(), block.getView(), Hex.encode0x(block.getCoinbase()),
-                    Hex.encode0x(block.getParentHash()), block.getTimestamp(),
-                    TimeUtil.formatTimestamp(block.getTimestamp()), Hex.encode0x(block.getTransactionsRoot()),
-                    Hex.encode0x(block.getResultsRoot()), Hex.encode0x(block.getStateRoot()),
-                    Hex.encode0x(block.getData()), block.getTransactions().stream()
-                            .map(GetTransactionResponse.Result::new).collect(Collectors.toList()));
+            this(Hex.encode0x(block.getHash()), //
+                    block.getNumber(), block.getView(), //
+                    Hex.encode0x(block.getCoinbase()), //
+                    Hex.encode0x(block.getParentHash()), //
+                    block.getTimestamp(), //
+                    TimeUtil.formatTimestamp(block.getTimestamp()), //
+                    Hex.encode0x(block.getTransactionsRoot()), //
+                    Hex.encode0x(block.getResultsRoot()), //
+                    Hex.encode0x(block.getStateRoot()), //
+                    Hex.encode0x(block.getData()), //
+                    block.getTransactions().stream().map(GetTransactionResponse.Result::new)
+                            .collect(Collectors.toList()));
         }
     }
 }

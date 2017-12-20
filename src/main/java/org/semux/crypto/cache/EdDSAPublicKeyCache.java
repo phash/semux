@@ -19,6 +19,8 @@ import net.i2p.crypto.eddsa.EdDSAPublicKey;
 
 public final class EdDSAPublicKeyCache {
 
+    private static final int MAX_CACHE_SIZE = 16 * 1024;
+
     /**
      * EdDSAPublicKey constructor consumes ~37% of CPU time of
      * EdDSAPublicKey::verify mainly by creating precomputed tables. Considering
@@ -26,10 +28,9 @@ public final class EdDSAPublicKeyCache {
      * keys can reduce the synchronization time significantly.
      * <p>
      * The cache is a concurrent hash map of ByteArray.of(pubKey) -> EdDSAPublicKey
-     * <p>
-     * softValues() allows GC to cleanup cached values automatically.
      */
-    private static final Cache<ByteArray, EdDSAPublicKey> pubKeyCache = Caffeine.newBuilder().softValues().build();
+    private static final Cache<ByteArray, EdDSAPublicKey> pubKeyCache = Caffeine.newBuilder()
+            .maximumSize(MAX_CACHE_SIZE).build();
 
     private EdDSAPublicKeyCache() {
     }

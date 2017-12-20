@@ -6,21 +6,25 @@
  */
 package org.semux.util;
 
-import java.io.BufferedReader;
 import java.io.Console;
-import java.io.InputStreamReader;
+import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.InetSocketAddress;
 import java.util.Scanner;
 
-import org.semux.config.Constants;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.zafarkhaja.semver.Version;
 
-import oshi.SystemInfo;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.nio.NioDatagramChannel;
+import io.netty.resolver.dns.DnsNameResolver;
+import io.netty.resolver.dns.DnsNameResolverBuilder;
+import io.netty.resolver.dns.SequentialDnsServerAddressStreamProvider;
 
 public class SystemUtil {
     private static final Logger logger = LoggerFactory.getLogger(SystemUtil.class);
@@ -77,28 +81,25 @@ public class SystemUtil {
     }
 
     /**
-     * Returns the public IP address of this peer.
+     * Returns the public IP address of this peer by querying OpenDNS.
      * 
      * @return an IP address if available, otherwise local address
      */
     public static String getIp() {
         try {
-            URL url = new URL("http://api.ipify.org/");
-            URLConnection con = url.openConnection();
-            con.addRequestProperty("User-Agent", Constants.DEFAULT_USER_AGENT);
-            con.setConnectTimeout(Constants.DEFAULT_CONNECT_TIMEOUT);
-            con.setReadTimeout(Constants.DEFAULT_READ_TIMEOUT);
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String ip = reader.readLine().trim();
-            reader.close();
-
-            // only IPv4 is supported currently
-            if (ip.matches("(\\d{1,3}\\.){3}\\d{1,3}")) {
-                return ip;
-            }
+            DnsNameResolver nameResolver = new DnsNameResolverBuilder(new NioEventLoopGroup().next())
+                    .channelType(NioDatagramChannel.class)
+                    .queryTimeoutMillis(1000)
+                    .nameServerProvider(new SequentialDnsServerAddressStreamProvider(
+                            new InetSocketAddress("208.67.222.222", 53),
+                            new InetSocketAddress("208.67.220.220", 53),
+                            new InetSocketAddress("208.67.222.220", 53),
+                            new InetSocketAddress("208.67.220.222", 53)))
+                    .build();
+            return nameResolver.resolve("myip.opendns.com").await().get().getHostAddress();
         } catch (Exception e) {
-            logger.error("Failed to retrieve your IP address from ipify.org");
+            // no stack trace to avoid too many logs when the wallet goes offline
+            logger.error("Failed to retrieve your IP address from opendns");
         }
 
         try {
@@ -199,9 +200,16 @@ public class SystemUtil {
      * 
      * @return
      */
-    public static Long getAvailableMemorySize() {
-        SystemInfo systemInfo = new SystemInfo();
-        return systemInfo.getHardware().getMemory().getAvailable();
+    public static long getAvailableMemorySize() {
+        // NOTE: This following tweak is platform-dependent.
+        try {
+            MBeanServer server = ManagementFactory.getPlatformMBeanServer();
+            ObjectName name = new ObjectName("java.lang", "type", "OperatingSystem");
+            return (Long) server.getAttribute(name, "FreePhysicalMemorySize");
+        } catch (Exception e) {
+            logger.info("Failed to get free memory size", e);
+            return 0xffffffffL;
+        }
     }
 
     /**

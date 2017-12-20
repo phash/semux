@@ -60,11 +60,18 @@ public class GetTransactionResponse extends ApiHandlerResponse {
         @JsonProperty("data")
         public final String data;
 
-        public Result(@JsonProperty("hash") String hash, @JsonProperty("type") String type,
-                @JsonProperty("from") String from, @JsonProperty("to") String to, @JsonProperty("value") Long value,
-                @JsonProperty("fee") Long fee, @JsonProperty("nonce") Long nonce,
-                @JsonProperty("timestamp") Long timestamp, @JsonProperty("date") String date,
-                @JsonProperty("data") String data) {
+        public Result( //
+                @JsonProperty("hash") String hash, //
+                @JsonProperty("type") String type, //
+                @JsonProperty("from") String from, //
+                @JsonProperty("to") String to, //
+                @JsonProperty("value") Long value, //
+                @JsonProperty("fee") Long fee, //
+                @JsonProperty("nonce") Long nonce, //
+                @JsonProperty("timestamp") Long timestamp, //
+                @JsonProperty("date") String date, //
+                @JsonProperty("data") String data //
+        ) {
             this.hash = hash;
             this.type = type;
             this.from = from;
@@ -78,9 +85,15 @@ public class GetTransactionResponse extends ApiHandlerResponse {
         }
 
         public Result(Transaction tx) {
-            this(Hex.encode0x(tx.getHash()), tx.getType().toString(), Hex.encode0x(tx.getFrom()),
-                    Hex.encode0x(tx.getTo()), tx.getValue(), tx.getFee(), tx.getNonce(), tx.getTimestamp(),
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(tx.getTimestamp())),
+            this(Hex.encode0x(tx.getHash()), //
+                    tx.getType().toString(), //
+                    Hex.encode0x(tx.getFrom()), //
+                    Hex.encode0x(tx.getTo()), //
+                    tx.getValue(), //
+                    tx.getFee(), //
+                    tx.getNonce(), //
+                    tx.getTimestamp(), //
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(tx.getTimestamp())), //
                     Hex.encode0x(tx.getData()));
         }
     }

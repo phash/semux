@@ -53,10 +53,15 @@ public class GetDelegateResponse extends ApiHandlerResponse {
                     validatorStats.getBlocksForged(), validatorStats.getTurnsHit(), validatorStats.getTurnsMissed());
         }
 
-        public Result(@JsonProperty("address") String address, @JsonProperty("name") String name,
-                @JsonProperty("registeredAt") Long registeredAt, @JsonProperty("votes") Long votes,
-                @JsonProperty("blocksForged") Long blocksForged, @JsonProperty("turnsHit") Long turnsHit,
-                @JsonProperty("turnsMissed") Long turnsMissed) {
+        public Result( //
+                @JsonProperty("address") String address, //
+                @JsonProperty("name") String name, //
+                @JsonProperty("registeredAt") Long registeredAt, //
+                @JsonProperty("votes") Long votes, //
+                @JsonProperty("blocksForged") Long blocksForged, //
+                @JsonProperty("turnsHit") Long turnsHit, //
+                @JsonProperty("turnsMissed") Long turnsMissed //
+        ) {
             this.address = address;
             this.name = name;
             this.registeredAt = registeredAt;
