@@ -139,6 +139,9 @@ public class DelegatesPanel extends JPanel implements ActionListener {
                 .get("DelegateRegistrationNoteHtml", SwingUtil.formatValue(config.minDelegateBurnAmount()),
                         SwingUtil.formatValue(config.minTransactionFee())));
         label.setForeground(Color.DARK_GRAY);
+        
+        JLabel legend = new JLabel(GuiMessages.get("ValidatorExplanationHtml"));
+        legend.setForeground(Color.DARK_GRAY);
 
         selectFrom = new JComboBox<>();
         selectFrom.setActionCommand(Action.SELECT_ACCOUNT.name());
@@ -155,6 +158,7 @@ public class DelegatesPanel extends JPanel implements ActionListener {
                         .addComponent(votePanel, GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
                         .addComponent(selectFrom, GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
                         .addComponent(label, GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+                        .addComponent(legend, GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
                         .addComponent(delegateRegistrationPanel, GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)))
         );
         groupLayout.setVerticalGroup(
@@ -167,6 +171,8 @@ public class DelegatesPanel extends JPanel implements ActionListener {
                     .addComponent(delegateRegistrationPanel, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                     .addGap(18)
                     .addComponent(label)
+                    .addGap(18)
+                    .addComponent(legend)
                     .addContainerGap(174, Short.MAX_VALUE))
                 .addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
         );
