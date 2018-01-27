@@ -22,7 +22,6 @@ import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -35,13 +34,15 @@ import org.semux.crypto.Hex;
 import org.semux.crypto.Key;
 import org.semux.gui.Action;
 import org.semux.gui.AddressBookEntry;
+import org.semux.gui.Lockable;
+import org.semux.gui.MainFrame;
 import org.semux.gui.SwingUtil;
 import org.semux.gui.model.WalletModel;
 import org.semux.message.GuiMessages;
 import org.semux.util.ByteArray;
 import org.semux.util.exception.UnreachableException;
 
-public class AddressBookDialog extends JDialog implements ActionListener {
+public class AddressBookDialog extends JDialog implements ActionListener, Lockable {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,11 +54,12 @@ public class AddressBookDialog extends JDialog implements ActionListener {
     private final JTable table;
     private final AddressTableModel tableModel;
 
-    public AddressBookDialog(JFrame parent, WalletModel model, Wallet wallet) {
+    public AddressBookDialog(MainFrame parent, WalletModel model, Wallet wallet) {
         super(null, GuiMessages.get("AddressBook"), Dialog.ModalityType.MODELESS);
         setName("AddressBookDialog");
         this.model = model;
         this.wallet = wallet;
+        parent.registerLockableComponent(this);
 
         tableModel = new AddressTableModel();
         table = new JTable(tableModel);
@@ -244,4 +246,11 @@ public class AddressBookDialog extends JDialog implements ActionListener {
 
         return entries;
     }
+
+    @Override
+    public void lock() {
+        this.dispose();
+
+    }
+
 }

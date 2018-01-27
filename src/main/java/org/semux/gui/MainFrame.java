@@ -20,6 +20,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -67,6 +69,8 @@ public class MainFrame extends JFrame implements ActionListener {
 
     private JPanel activePanel;
     private JButton activeButton;
+
+    private List<Lockable> componentsToLock = new CopyOnWriteArrayList<>();
 
     public MainFrame(SemuxGui gui) {
         // ensure that all windows are released before it starts closing the Kernel
@@ -193,6 +197,9 @@ public class MainFrame extends JFrame implements ActionListener {
         w.lock();
 
         lockGlassPane.setVisible(true);
+        for (Lockable lockable : componentsToLock) {
+            lockable.lock();
+        }
         btnLock.setText(GuiMessages.get("Unlock"));
     }
 
@@ -286,5 +293,9 @@ public class MainFrame extends JFrame implements ActionListener {
             g.setColor(new Color(0, 0, 0, 96));
             g.fillRect(0, 0, this.getWidth(), this.getHeight());
         }
+    }
+
+    public void registerLockableComponent(Lockable component) {
+        componentsToLock.add(component);
     }
 }

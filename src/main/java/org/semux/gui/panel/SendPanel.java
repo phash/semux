@@ -20,7 +20,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -40,6 +39,7 @@ import org.semux.crypto.CryptoException;
 import org.semux.crypto.Hex;
 import org.semux.crypto.Key;
 import org.semux.gui.Action;
+import org.semux.gui.MainFrame;
 import org.semux.gui.SemuxGui;
 import org.semux.gui.SwingUtil;
 import org.semux.gui.dialog.AddressBookDialog;
@@ -53,7 +53,7 @@ public class SendPanel extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 1L;
 
-    private JFrame frame;
+    private MainFrame frame;
     private transient WalletModel model;
 
     private transient Kernel kernel;
@@ -69,7 +69,7 @@ public class SendPanel extends JPanel implements ActionListener {
 
     private AddressBookDialog addressBookDialog;
 
-    public SendPanel(SemuxGui gui, JFrame frame) {
+    public SendPanel(SemuxGui gui, MainFrame frame) {
         this.model = gui.getModel();
         this.model.addListener(this);
 

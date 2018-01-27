@@ -8,12 +8,12 @@ package org.semux.gui;
 
 import javax.swing.JFrame;
 
-public class BaseTestApplication extends JFrame {
+public class BaseTestApplication extends MainFrame {
 
     private static final long serialVersionUID = 1L;
 
     public BaseTestApplication() {
-        super();
+        super(null);
         setTitle(getClass().getCanonicalName());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
